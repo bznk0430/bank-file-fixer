@@ -7,18 +7,13 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', '微軟正黑體', sans-serif; background: #f0f2f5; min-height: 100vh; padding: 24px; color: #1a1a2e; }
-  h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
-  .subtitle { color: #666; font-size: 13px; margin-bottom: 24px; }
+  h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 13px; margin-bottom: 8px; }
+  .principle { background: #e8f4fd; border-left: 4px solid #4361ee; padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 13px; color: #1a3a5c; margin-bottom: 20px; }
 
   .drop-zone {
-    border: 2px dashed #aab4c8;
-    border-radius: 12px;
-    padding: 48px 32px;
-    text-align: center;
-    background: #fff;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 20px;
+    border: 2px dashed #aab4c8; border-radius: 12px; padding: 48px 32px;
+    text-align: center; background: #fff; cursor: pointer; transition: all 0.2s; margin-bottom: 20px;
   }
   .drop-zone.drag-over { border-color: #4361ee; background: #f0f3ff; }
   .drop-zone .icon { font-size: 48px; margin-bottom: 12px; }
@@ -30,24 +25,23 @@
   .card h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #333; }
 
   .status-bar { display: flex; gap: 16px; flex-wrap: wrap; }
-  .stat { flex: 1; min-width: 120px; background: #f7f8fc; border-radius: 8px; padding: 12px 16px; }
+  .stat { flex: 1; min-width: 100px; background: #f7f8fc; border-radius: 8px; padding: 12px 16px; }
   .stat .label { font-size: 11px; color: #888; margin-bottom: 4px; }
   .stat .value { font-size: 20px; font-weight: 700; color: #1a1a2e; }
 
-  .issue-list { list-style: none; }
-  .issue-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
-  .issue-item:last-child { border-bottom: none; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-  .badge.warn { background: #fff3cd; color: #856404; }
-  .badge.fix { background: #d1e7dd; color: #0a3622; }
-  .badge.err { background: #f8d7da; color: #842029; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f7f8fc; padding: 8px 10px; text-align: left; color: #555; font-weight: 600; border-bottom: 2px solid #e9ecef; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr.problem td { background: #fff8f8; }
 
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 10px 24px; border-radius: 8px; border: none;
-    font-size: 14px; font-weight: 600; cursor: pointer;
-    transition: all 0.15s;
-  }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .badge.ok { background: #d1e7dd; color: #0a3622; }
+  .badge.warn { background: #fff3cd; color: #856404; }
+  .badge.err { background: #f8d7da; color: #842029; }
+  .badge.info { background: #e0cffc; color: #432874; }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
   .btn-primary { background: #4361ee; color: #fff; }
   .btn-primary:hover { background: #3451d1; }
   .btn-primary:disabled { background: #c0c9f5; cursor: not-allowed; }
@@ -55,26 +49,32 @@
   .btn-secondary:hover { background: #dee2e6; }
 
   .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .no-issue { color: #198754; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+  .no-issue { color: #198754; font-size: 14px; }
 
-  .log { background: #f8f9fa; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; line-height: 1.6; max-height: 200px; overflow-y: auto; }
+  .log { background: #f8f9fa; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; line-height: 1.7; max-height: 220px; overflow-y: auto; margin-top: 12px; }
   .log .ok { color: #198754; }
-  .log .warn { color: #856404; }
   .log .fix-log { color: #0a58ca; }
 
   .hidden { display: none; }
-  .tag { font-size: 11px; background: #e9ecef; color: #555; padding: 2px 6px; border-radius: 4px; }
+
+  .len-box { display: inline-block; padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+  .len-ok { background: #d1e7dd; color: #0a3622; }
+  .len-bad { background: #f8d7da; color: #842029; }
+  .len-arrow { color: #888; font-size: 11px; }
 </style>
 </head>
 <body>
 
 <h1>🏦 企網銀上傳檔案修正工具</h1>
-<p class="subtitle">將 .txt 檔案拖進來，系統自動偵測格式問題並修正，輸出可直接上傳的正確檔案</p>
+<p class="subtitle">拖拉 .txt 檔案，自動偵測每列碼數問題並修正</p>
+<div class="principle">
+  📐 <strong>固定碼數原則：</strong>每列總碼數必須固定（Header 375、明細 923、Footer 92）。若任何欄位長度改變（如名稱從10碼改8碼），系統自動在正確位置補足或減少空格，確保總碼數不變。
+</div>
 
 <div class="drop-zone" id="dropZone">
   <div class="icon">📂</div>
   <p>拖拉 .txt 檔案到這裡，或點擊選擇檔案</p>
-  <p class="hint">支援多筆明細（0002）、Header（0001）、Footer（0003）格式自動修正</p>
+  <p class="hint">支援 0001 Header、0002 明細、0003 Footer 格式</p>
   <input type="file" id="fileInput" accept=".txt">
 </div>
 
@@ -82,37 +82,44 @@
   <div class="card">
     <h2>📊 檔案概況</h2>
     <div class="status-bar">
-      <div class="stat"><div class="label">檔案名稱</div><div class="value" id="statName" style="font-size:13px;word-break:break-all"></div></div>
+      <div class="stat"><div class="label">檔案名稱</div><div class="value" id="statName" style="font-size:12px;word-break:break-all;margin-top:4px"></div></div>
       <div class="stat"><div class="label">總行數</div><div class="value" id="statLines">-</div></div>
       <div class="stat"><div class="label">明細筆數</div><div class="value" id="statDetails">-</div></div>
-      <div class="stat"><div class="label">偵測問題數</div><div class="value" id="statIssues" style="color:#dc3545">-</div></div>
+      <div class="stat"><div class="label">需修正</div><div class="value" id="statIssues" style="color:#dc3545">-</div></div>
     </div>
   </div>
 
   <div class="card">
-    <h2>🔍 偵測結果</h2>
-    <ul class="issue-list" id="issueList"></ul>
-    <div id="noIssue" class="no-issue hidden">✅ 未發現格式問題，檔案應可直接上傳</div>
+    <h2>🔍 逐列檢查結果</h2>
+    <div style="overflow-x:auto">
+      <table id="checkTable">
+        <thead><tr><th>行號</th><th>類型</th><th>實際碼數</th><th>目標碼數</th><th>差異</th><th>問題說明</th></tr></thead>
+        <tbody id="checkBody"></tbody>
+      </table>
+    </div>
+    <div id="noIssue" class="no-issue hidden" style="margin-top:10px">✅ 所有列碼數正確，無需修正</div>
   </div>
 
   <div class="card">
-    <h2>⚙️ 修正動作</h2>
-    <div id="actions" class="actions">
+    <h2>⚙️ 修正</h2>
+    <div class="actions">
       <button class="btn btn-primary" id="fixBtn" onclick="doFix()">🔧 自動修正並下載</button>
       <button class="btn btn-secondary" onclick="resetTool()">↩ 重新選擇檔案</button>
     </div>
-    <div id="fixLog" class="log hidden" style="margin-top:12px"></div>
+    <div id="fixLog" class="log hidden"></div>
   </div>
 </div>
 
 <script>
 let fileData = null;
 let fileName = '';
+let analysisResult = [];
+
+const TARGET = { header: 375, detail: 923, footer: 92 };
 
 // ─── Drag & Drop ───────────────────────────────────────────
 const dz = document.getElementById('dropZone');
 const fi = document.getElementById('fileInput');
-
 dz.addEventListener('click', () => fi.click());
 dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
@@ -127,8 +134,7 @@ function handleFile(file) {
   reader.readAsArrayBuffer(file);
 }
 
-// ─── Core Logic ─────────────────────────────────────────────
-
+// ─── Split lines ────────────────────────────────────────────
 function splitLines(data) {
   const lines = [];
   let start = 0;
@@ -138,150 +144,141 @@ function splitLines(data) {
       start = i + 1;
     }
   }
-  // remove empty last line
-  if (lines.length && lines[lines.length-1].length === 0) lines.pop();
+  if (lines.length && lines[lines.length - 1].length === 0) lines.pop();
   return lines;
 }
 
-// Find end of non-space bytes starting at pos
+function getLineType(line) {
+  if (line.length < 4) return 'unknown';
+  if (line[0]===0x30 && line[1]===0x30 && line[2]===0x30 && line[3]===0x31) return 'header';
+  if (line[0]===0x30 && line[1]===0x30 && line[2]===0x30 && line[3]===0x32) return 'detail';
+  if (line[0]===0x30 && line[1]===0x30 && line[2]===0x30 && line[3]===0x33) return 'footer';
+  return 'unknown';
+}
+
+const typeLabel = { header: 'Header (0001)', detail: '明細 (0002)', footer: 'Footer (0003)', unknown: '其他' };
+const typeTarget = { header: 375, detail: 923, footer: 92 };
+
+// ─── Field-level checks for detail lines ────────────────────
 function findNonSpaceEnd(line, pos) {
   let i = pos;
   while (i < line.length && line[i] !== 0x20) i++;
   return i;
 }
-
-// Count spaces from pos
 function countSpaces(line, pos) {
   let i = pos;
   while (i < line.length && line[i] === 0x20) i++;
   return i - pos;
 }
 
-// Issues array: {line: N, type: 'header'|'detail'|'footer', desc, fix}
-let issues = [];
+function getDetailFieldIssues(line) {
+  const issues = [];
 
+  // Field 1: 收款人名稱 pos 49, 欄位應占 60 bytes (name + spaces) → ID at pos 109
+  const name1End = findNonSpaceEnd(line, 49);
+  const afterName1 = name1End + countSpaces(line, name1End);
+  const field1 = afterName1 - 49;
+  if (field1 !== 60) {
+    const diff = 60 - field1;
+    issues.push(`收款人名稱欄位 ${field1} bytes (應 60，${diff > 0 ? '少' : '多'} ${Math.abs(diff)} 個空格)`);
+  }
+
+  // Field 2: 金額前空格 - PayerID 結束於 pos 574，應有 20 個空格
+  const amtSp = countSpaces(line, 574);
+  if (amtSp !== 20 && amtSp > 0 && amtSp < 60) {
+    const diff = 20 - amtSp;
+    issues.push(`金額前空格 ${amtSp} 個 (應 20 個，${diff > 0 ? '少' : '多'} ${Math.abs(diff)} 個)`);
+  }
+
+  // Field 3: 第2段收款方名稱 pos 506, 應占 60 bytes
+  if (line.length >= 530) {
+    const name2End = findNonSpaceEnd(line, 506);
+    const afterName2 = name2End + countSpaces(line, name2End);
+    const field2 = afterName2 - 506;
+    if (field2 !== 60) {
+      const diff = 60 - field2;
+      issues.push(`收款方公司名稱欄位 ${field2} bytes (應 60，${diff > 0 ? '少' : '多'} ${Math.abs(diff)} 個空格)`);
+    }
+  }
+
+  return issues;
+}
+
+// ─── Analyze ────────────────────────────────────────────────
 function analyzeFile() {
-  issues = [];
   const lines = splitLines(fileData);
-  const details = lines.filter(l => l.length >= 4 && l[0]===0x30 && l[1]===0x30 && l[2]===0x30 && l[3]===0x32);
-
-  document.getElementById('statName').textContent = fileName;
-  document.getElementById('statLines').textContent = lines.length;
-  document.getElementById('statDetails').textContent = details.length;
+  analysisResult = [];
+  let issueCount = 0;
+  let detailCount = 0;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    if (line.length < 4) continue;
-    const prefix = String.fromCharCode(line[0], line[1], line[2], line[3]);
+    const type = getLineType(line);
+    const target = typeTarget[type] || null;
+    const actual = line.length;
+    const diff = target !== null ? target - actual : null;
+    const ok = diff === 0;
 
-    if (prefix === '0001') analyzeHeader(line, i+1);
-    else if (prefix === '0002') analyzeDetail(line, i+1);
-    else if (line[0]===0x30 && line[1]===0x30 && line[2]===0x30 && line[3]===0x33) analyzeFooter(line, i+1);
+    let fieldIssues = [];
+    if (type === 'detail') {
+      detailCount++;
+      fieldIssues = getDetailFieldIssues(line);
+    }
+
+    const hasIssue = !ok && target !== null;
+    if (hasIssue) issueCount++;
+
+    analysisResult.push({ lineNo: i + 1, type, actual, target, diff, ok, fieldIssues, line });
   }
 
-  renderIssues();
+  // Render
+  document.getElementById('statName').textContent = fileName;
+  document.getElementById('statLines').textContent = lines.length;
+  document.getElementById('statDetails').textContent = detailCount;
+  document.getElementById('statIssues').textContent = issueCount;
+
+  renderTable();
   document.getElementById('resultSection').classList.remove('hidden');
-  document.getElementById('statIssues').textContent = issues.length;
+  document.getElementById('fixBtn').disabled = issueCount === 0;
 }
 
-function analyzeHeader(line, lineNo) {
-  // Header should be 375 bytes
-  if (line.length !== 375) {
-    // Check if JSON present
-    let jsonPos = -1;
-    for (let i = 18; i < line.length; i++) {
-      if (line[i] === 0x7B) { jsonPos = i; break; }
-    }
-    if (jsonPos !== -1 && jsonPos !== 195) {
-      issues.push({ lineNo, type: 'header', desc: `Header JSON 位置在 ${jsonPos}（應為 195），JSON前空格數 ${jsonPos-18}（應為 177）`, fix: 'header_json' });
-    }
-    if (line.length !== 375) {
-      issues.push({ lineNo, type: 'header', desc: `Header 行長 ${line.length} bytes（應為 375 bytes）`, fix: 'header_pad' });
-    }
-  } else {
-    // Check JSON position if JSON exists
-    let jsonPos = -1;
-    for (let i = 18; i < line.length; i++) {
-      if (line[i] === 0x7B) { jsonPos = i; break; }
-    }
-    if (jsonPos !== -1 && jsonPos !== 195) {
-      issues.push({ lineNo, type: 'header', desc: `Header JSON 位置在 ${jsonPos}（應為 195）`, fix: 'header_json' });
-    }
+function renderTable() {
+  const tbody = document.getElementById('checkBody');
+  tbody.innerHTML = '';
+  let hasIssue = false;
+
+  for (const r of analysisResult) {
+    if (r.type === 'unknown') continue;
+    const isProblem = !r.ok && r.target !== null;
+    if (isProblem) hasIssue = true;
+
+    const tr = document.createElement('tr');
+    if (isProblem) tr.className = 'problem';
+
+    const diffText = r.diff === null ? '-'
+      : r.diff === 0 ? `<span class="badge ok">✓ 正確</span>`
+      : `<span class="badge err">${r.diff > 0 ? '+' : ''}${r.diff}</span>`;
+
+    const fieldText = r.fieldIssues.length > 0
+      ? r.fieldIssues.map(s => `<div style="margin-bottom:2px">• ${s}</div>`).join('')
+      : (isProblem ? '尾部空格需調整' : '');
+
+    tr.innerHTML = `
+      <td>${r.lineNo}</td>
+      <td><span class="badge info">${typeLabel[r.type]}</span></td>
+      <td><span class="len-box ${r.ok ? 'len-ok' : 'len-bad'}">${r.actual}</span></td>
+      <td><span class="len-box len-ok">${r.target || '-'}</span></td>
+      <td>${diffText}</td>
+      <td style="color:#555">${fieldText}</td>
+    `;
+    tbody.appendChild(tr);
   }
+
+  document.getElementById('noIssue').classList.toggle('hidden', hasIssue);
 }
 
-function analyzeDetail(line, lineNo) {
-  let fixNeeded = [];
-
-  // Check 1: First name field (pos 49) should span 60 bytes (name + spaces) → ID at pos 109
-  const name1End = findNonSpaceEnd(line, 49);
-  const afterName1 = name1End + countSpaces(line, name1End);
-  const field1Width = afterName1 - 49;
-  if (field1Width < 60) {
-    fixNeeded.push(`收款人名稱欄位寬 ${field1Width} bytes（應為 60，少 ${60-field1Width} 個空格）`);
-  }
-
-  // After fix1, ID should be at 109, then 158 spaces, JSON1 at 277
-  // Check 2: amount spacing - PayerID ends at 574, should have 20 spaces before amount
-  const amtSpaces = countSpaces(line, 574);
-  if (amtSpaces < 20 && amtSpaces > 0) {
-    fixNeeded.push(`付款帳號後空格 ${amtSpaces} 個（應為 20 個，少 ${20-amtSpaces} 個）`);
-  }
-
-  // Check 3: Second name field (pos 506) should be 60 bytes
-  if (line.length >= 506) {
-    const name2End = findNonSpaceEnd(line, 506);
-    const afterName2 = name2End + countSpaces(line, name2End);
-    const field2Width = afterName2 - 506;
-    if (field2Width < 60) {
-      fixNeeded.push(`收款方公司名稱欄位寬 ${field2Width} bytes（應為 60，少 ${60-field2Width} 個空格）`);
-    }
-  }
-
-  // Check 4: Total line length
-  if (line.length !== 923) {
-    fixNeeded.push(`明細行長 ${line.length} bytes（應為 923 bytes）`);
-  }
-
-  if (fixNeeded.length > 0) {
-    issues.push({ lineNo, type: 'detail', desc: fixNeeded.join('；'), fix: 'detail' });
-  }
-}
-
-function analyzeFooter(line, lineNo) {
-  if (line.length !== 92) {
-    issues.push({ lineNo, type: 'footer', desc: `Footer 行長 ${line.length} bytes（應為 92 bytes，差 ${92-line.length} 個空格）`, fix: 'footer_pad' });
-  }
-}
-
-function renderIssues() {
-  const ul = document.getElementById('issueList');
-  ul.innerHTML = '';
-  const noIssue = document.getElementById('noIssue');
-
-  if (issues.length === 0) {
-    noIssue.classList.remove('hidden');
-    document.getElementById('fixBtn').disabled = true;
-    return;
-  }
-  noIssue.classList.add('hidden');
-  document.getElementById('fixBtn').disabled = false;
-
-  // Group by type
-  const typeLabel = { header: 'Header', detail: '明細', footer: 'Footer' };
-  const typeBadge = { header: 'warn', detail: 'fix', footer: 'warn' };
-
-  for (const iss of issues) {
-    const li = document.createElement('li');
-    li.className = 'issue-item';
-    li.innerHTML = `<span class="badge ${typeBadge[iss.type]}">${typeLabel[iss.type]}</span><span class="tag">第 ${iss.lineNo} 行</span><span>${iss.desc}</span>`;
-    ul.appendChild(li);
-  }
-}
-
-// ─── Fix Logic ──────────────────────────────────────────────
-
-function insertBytes(arr, pos, count) {
+// ─── Fix ────────────────────────────────────────────────────
+function insertAt(arr, pos, count) {
   const spaces = new Uint8Array(count).fill(0x20);
   const result = new Uint8Array(arr.length + count);
   result.set(arr.slice(0, pos), 0);
@@ -290,122 +287,128 @@ function insertBytes(arr, pos, count) {
   return result;
 }
 
-function padOrTrim(arr, targetLen) {
-  if (arr.length === targetLen) return arr;
-  if (arr.length > targetLen) return arr.slice(0, targetLen);
-  const result = new Uint8Array(targetLen).fill(0x20);
-  result.set(arr);
+function removeAt(arr, pos, count) {
+  const result = new Uint8Array(arr.length - count);
+  result.set(arr.slice(0, pos), 0);
+  result.set(arr.slice(pos + count), pos);
   return result;
 }
 
-function fixLine(line, type) {
-  if (type === 'header') {
-    // Fix JSON position if present
-    let jsonPos = -1;
-    for (let i = 18; i < line.length; i++) {
-      if (line[i] === 0x7B) { jsonPos = i; break; }
-    }
-    if (jsonPos !== -1 && jsonPos !== 195) {
-      const diff = 195 - jsonPos;
-      if (diff > 0) line = insertBytes(line, jsonPos, diff);
-    }
-    return padOrTrim(line, 375);
+function padOrTrim(arr, target) {
+  if (arr.length === target) return arr;
+  if (arr.length < target) {
+    // Add spaces at end
+    const result = new Uint8Array(target).fill(0x20);
+    result.set(arr);
+    return result;
   }
-
-  if (type === 'detail') {
-    // Fix 1: First name field → should be 60 bytes from pos 49
-    const name1End = findNonSpaceEnd(line, 49);
-    const afterName1 = name1End + countSpaces(line, name1End);
-    const field1Width = afterName1 - 49;
-    if (field1Width < 60) {
-      const diff = 60 - field1Width;
-      line = insertBytes(line, name1End, diff);
-    }
-
-    // Fix 2: Second name field at pos 506 → 60 bytes
-    if (line.length >= 506) {
-      const name2End = findNonSpaceEnd(line, 506);
-      const afterName2 = name2End + countSpaces(line, name2End);
-      const field2Width = afterName2 - 506;
-      if (field2Width < 60) {
-        const diff = 60 - field2Width;
-        line = insertBytes(line, name2End, diff);
-      }
-    }
-
-    // Fix 3: Amount spacing at pos 574 → 20 spaces
-    const amtSpaces = countSpaces(line, 574);
-    if (amtSpaces < 20 && amtSpaces > 0) {
-      const diff = 20 - amtSpaces;
-      line = insertBytes(line, 574, diff);
-    }
-
-    // Pad to 923
-    return padOrTrim(line, 923);
-  }
-
-  if (type === 'footer') {
-    return padOrTrim(line, 92);
-  }
-
-  return line;
+  // Trim trailing spaces only
+  let trimPos = arr.length;
+  while (trimPos > target && arr[trimPos - 1] === 0x20) trimPos--;
+  return arr.slice(0, target);
 }
 
-function getLineType(line) {
-  if (line.length < 4) return 'unknown';
-  const p = String.fromCharCode(line[0], line[1], line[2], line[3]);
-  if (p === '0001') return 'header';
-  if (p === '0002') return 'detail';
-  if (line[0]===0x30 && line[1]===0x30 && line[2]===0x30 && line[3]===0x33) return 'footer';
-  return 'unknown';
+function fixDetail(line) {
+  // Fix 1: 收款人名稱欄位 (pos 49) → 60 bytes
+  const name1End = findNonSpaceEnd(line, 49);
+  const after1 = name1End + countSpaces(line, name1End);
+  const f1 = after1 - 49;
+  if (f1 < 60) {
+    line = insertAt(line, name1End, 60 - f1);
+  } else if (f1 > 60) {
+    // Remove extra spaces just after name
+    const extra = Math.min(f1 - 60, after1 - name1End);
+    line = removeAt(line, name1End, extra);
+  }
+
+  // Fix 2: 第2段收款方名稱 (pos 506) → 60 bytes
+  if (line.length >= 530) {
+    const name2End = findNonSpaceEnd(line, 506);
+    const after2 = name2End + countSpaces(line, name2End);
+    const f2 = after2 - 506;
+    if (f2 < 60) {
+      line = insertAt(line, name2End, 60 - f2);
+    } else if (f2 > 60) {
+      const extra = Math.min(f2 - 60, after2 - name2End);
+      line = removeAt(line, name2End, extra);
+    }
+  }
+
+  // Fix 3: 金額前空格 (pos 574) → 20 個空格
+  const amtSp = countSpaces(line, 574);
+  if (amtSp > 0 && amtSp < 60) {
+    if (amtSp < 20) {
+      line = insertAt(line, 574, 20 - amtSp);
+    } else if (amtSp > 20) {
+      line = removeAt(line, 574, amtSp - 20);
+    }
+  }
+
+  // Final: 補/裁至 923 bytes
+  return padOrTrim(line, 923);
+}
+
+function fixHeader(line) {
+  // If has JSON, ensure it's at pos 195
+  let jsonPos = -1;
+  for (let i = 18; i < line.length; i++) {
+    if (line[i] === 0x7B) { jsonPos = i; break; }
+  }
+  if (jsonPos !== -1 && jsonPos !== 195) {
+    const diff = 195 - jsonPos;
+    if (diff > 0) line = insertAt(line, jsonPos, diff);
+    else if (diff < 0) line = removeAt(line, jsonPos + diff, -diff);
+  }
+  return padOrTrim(line, 375);
+}
+
+function fixFooter(line) {
+  return padOrTrim(line, 92);
 }
 
 function doFix() {
-  const lines = splitLines(fileData);
   const logEl = document.getElementById('fixLog');
   logEl.classList.remove('hidden');
   logEl.innerHTML = '';
 
-  let fixedLines = [];
+  const lines = splitLines(fileData);
+  const fixedLines = [];
   let fixCount = 0;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+    let line = new Uint8Array(lines[i]);
     const type = getLineType(line);
     let fixed = line;
 
-    if (type !== 'unknown') {
-      fixed = fixLine(new Uint8Array(line), type);
-      if (fixed.length !== line.length || !arrEqual(fixed, line)) {
-        fixCount++;
-        logEl.innerHTML += `<div class="fix-log">✔ 第 ${i+1} 行 [${type}]：${line.length} → ${fixed.length} bytes</div>`;
-      } else {
-        logEl.innerHTML += `<div class="ok">✓ 第 ${i+1} 行 [${type}]：${fixed.length} bytes 正確</div>`;
-      }
+    if (type === 'header') fixed = fixHeader(line);
+    else if (type === 'detail') fixed = fixDetail(line);
+    else if (type === 'footer') fixed = fixFooter(line);
+
+    const changed = fixed.length !== line.length || !arrEqual(fixed, line);
+    if (changed) {
+      fixCount++;
+      logEl.innerHTML += `<div class="fix-log">✔ 第 ${i+1} 行 [${typeLabel[type]}]：${line.length} bytes → ${fixed.length} bytes（${fixed.length - line.length > 0 ? '+' : ''}${fixed.length - line.length} 個空格）</div>`;
+    } else {
+      logEl.innerHTML += `<div class="ok">✓ 第 ${i+1} 行：${fixed.length} bytes 正確</div>`;
     }
     fixedLines.push(fixed);
   }
 
-  // Assemble output
+  // Build output
   let totalLen = fixedLines.reduce((s, l) => s + l.length, 0) + fixedLines.length - 1;
   const out = new Uint8Array(totalLen);
   let pos = 0;
   for (let i = 0; i < fixedLines.length; i++) {
-    out.set(fixedLines[i], pos);
-    pos += fixedLines[i].length;
+    out.set(fixedLines[i], pos); pos += fixedLines[i].length;
     if (i < fixedLines.length - 1) { out[pos] = 0x0A; pos++; }
   }
 
-  logEl.innerHTML += `<div style="margin-top:8px;font-weight:600">共修正 ${fixCount} 行，輸出檔案 ${out.length} bytes</div>`;
+  logEl.innerHTML += `<div style="margin-top:8px;font-weight:600">共修正 ${fixCount} 列，輸出檔案 ${out.length} bytes</div>`;
 
-  // Download
-  const baseName = fileName.replace(/\.txt$/i, '');
-  const outName = baseName + '_fixed.txt';
-  const blob = new Blob([out], { type: 'text/plain' });
+  const outName = fileName.replace(/\.txt$/i, '') + '_fixed.txt';
+  const blob = new Blob([out], { type: 'application/octet-stream' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = outName;
-  a.click();
+  const a = document.createElement('a'); a.href = url; a.download = outName; a.click();
   URL.revokeObjectURL(url);
 }
 
@@ -416,11 +419,11 @@ function arrEqual(a, b) {
 }
 
 function resetTool() {
-  fileData = null; fileName = '';
+  fileData = null; fileName = ''; analysisResult = [];
   document.getElementById('resultSection').classList.add('hidden');
   document.getElementById('fixLog').classList.add('hidden');
+  document.getElementById('fixLog').innerHTML = '';
   document.getElementById('fileInput').value = '';
-  issues = [];
 }
 </script>
 </body>
